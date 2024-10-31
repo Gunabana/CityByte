@@ -101,6 +101,7 @@
  
  
 <script>
+
     var timeout = null;
     var timeout1 = null;
     load = document.getElementById("loading")
@@ -211,12 +212,14 @@
         }
  
     }
+
  
     function redict_to_info(city, citiesJSON) {
         let citySuggestions = JSON.parse(citiesJSON).results;
- 
+
         if (citySuggestions.length !== 0) {
             location.href = "{% url "info_page" %}?city=" + citySuggestions[0].name + "&country=" + citySuggestions[0].address.countryCode;
+           
         }
     }
  

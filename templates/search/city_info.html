@@ -8,8 +8,6 @@
  
  
  
- 
- 
     <style>
         body {
             padding: 0;
@@ -68,13 +66,20 @@
             margin: 16px;
             cursor: pointer;
         }
+        #map {
+            height: 50vh;
+            width: 100%;
+        }
  
         .fav:hover{
             transform: scale(1.2);
         }
+        #map {
+    height: 100%;
+    }
     </style>
  
- 
+
  
  
  
@@ -92,7 +97,7 @@
             </div>
         </div>
     </div>
- 
+       <span class="fa fa-regular fa-heart fav" id="fav-toggle" onClick="favToggle(event)"></span>
     <div style="width: 100%;">
        <span class="fa fa-regular fa-heart fav" id="fav-toggle" onClick="favToggle(event)"></span>
     </div>
@@ -203,8 +208,15 @@
     </div>
  
     {% endif %}
- 
- 
+    <div  id="map-container" style="height: 60vh; width: 100%;"> <!-- Set remaining 50vh for map -->
+        <iframe
+            id="map"
+            loading="lazy"
+            allowfullscreen
+            frameborder="0" style="border:0; height: 100%; width: 100%;" 
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q=charlotte"
+        ></iframe>
+ <!---->
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Rated Dining Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in dining_info.results %}
@@ -264,7 +276,7 @@
                     </div>
                 {% endfor %}
             </div>
- 
+            
     {% endif %}
  
     <div class="container" id="comments" style="padding: 4px;">
@@ -301,14 +313,16 @@
  
 <script>
     // if in fav list remove checked else keep it
- 
+    setMap()
     var favBtn = document.getElementById("fav-toggle");
+    var cityval = "";
     {% if isInFav %}
         favBtn.classList.toggle("checked");
         console.log("CHECKED")
     {% endif %}
     function favToggle(event){
         const url = "{% url 'addToFav' %}?city={{city}}&country={{country}}"
+        m
         fetch(url).then(function(response) {
             return response.json();
             }).then(function(data) {
@@ -319,6 +333,11 @@
         favBtn.classList.toggle("checked");
  
     }
+  
+    function setMap() {
+        cityval = "{{city}}"+"+"+"{{country}}"
+  document.getElementById("map").src ="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q="+cityval;
+}
 </script>
  
 {% endblock %}
