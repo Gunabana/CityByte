@@ -141,11 +141,13 @@ def info_page(request):
         except Exception:
             weather_info = {}
     dining_info = cache.get(f"{city}-dinning")
+
     if not dining_info:
         dining_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="13065", sort="RELEVANCE", limit=5
         )
         cache.set(f"{city}-dinning", dining_info)
+
     airport_info = cache.get(f"{city}-airport")
     if not airport_info:
         airport_info = FourSquarePlacesHelper().get_places(
@@ -159,18 +161,23 @@ def info_page(request):
             city=f"{city}, {country}", categories="16000", sort="RELEVANCE", limit=5
         )
         cache.set(f"{city}-outdoor", outdoor_info)
+
     arts_info = cache.get(f"{city}-arts")
     if not arts_info:
         arts_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="10000", sort="RELEVANCE", limit=5
         )
         cache.set(f"{city}-arts", arts_info)
+        
     photo_link = cache.get(f"{city}-photolink")
     if not photo_link:
         photo_link = UnplashCityPhotoHelper().get_city_photo(city=city)
         cache.set(f"{city}-photolink", photo_link)
     comments = Comment.objects.filter(city=city, country=country).order_by("-created_on")
     isInFav = True if FavCityEntry.objects.filter(city=city, country=country, user=request.user).count() > 0 else False
+
+    itinerary_items = ItineraryItem.objects.filter(user=request.user, city=city).values_list('spot_name', flat=True)
+    
     return render(
         request,
         "search/city_info.html",
@@ -186,6 +193,7 @@ def info_page(request):
             "city": city,
             "country": country,
             "isInFav": isInFav,
+            "itinerary_items": itinerary_items,
         },
     )
 

@@ -276,110 +276,93 @@
         </h2>
     </div>
     
+
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Rated Dining Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in dining_info.results %}
-            <div class="card" style="width: 18rem;">
-                <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
-                <a href="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" class="btn btn-primary">Add to Itinerary</a>
-                <div id="itinerarySuccessModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="closeModal()">&times;</span>
-                        <p>Added to itinerary successfully!</p>
-                        <button class="btn-ok" onclick="closeModal()" style="background-color: blue; color: white; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer;">
-                            Okay
-                        </button>
-                    </div>
-                </div>
-                <div id="itineraryPresentModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="closePresentModal()">&times;</span>
-                        <p>Already present</p>
-                        <button class="btn-ok" onclick="closePresentModal()" style="background-color: blue; color: white; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer;">
-                            Okay
-                        </button>
-                    </div>
-                </div>
-                <a href="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}" class="btn btn-danger">Remove from Itinerary</a>
-                <div id="itineraryRemoveSuccessModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="RemovecloseModal()">&times;</span>
-                        <p>Removed from itinerary successfully!</p>
-                        <button class="btn-ok" onclick="RemovecloseModal()" style="background-color: blue; color: white; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer;">
-                            Okay
-                        </button>
-                    </div>
-                </div>
-                <div id="itineraryRemovedModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="RemovedModal()">&times;</span>
-                        <p>Already removed</p>
-                        <button class="btn-ok" onclick="RemovedModal()" style="background-color: blue; color: white; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer;">
-                            Okay
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ place.name }}</h5>
-                    <p class="card-text">{{ place.location.formatted_address }}</p>
-                </div>
-                <div class="card-footer">
-                    {{ place.categories.0.name }}
-                </div>
+        <div class="card" style="width: 18rem; position: relative;">
+            <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
+                <button class="btn btn-primary itinerary-toggle" 
+                data-in-itinerary="{% if place.name in itinerary_items %}true{% else %}false{% endif %}" 
+                data-url-add="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" 
+                data-url-remove="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}">
+                {% if place.name in itinerary_items %}Remove from Itinerary{% else %}Add to Itinerary{% endif %}
+                </button>
+            <div class="card-body">
+                <h5 class="card-title">{{ place.name }}</h5>
+                <p class="card-text">{{ place.location.formatted_address }}</p>
             </div>
+            <div class="card-footer">
+                {{ place.categories.0.name }}
+            </div>
+        </div>
         {% endfor %}
     </div>
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Landmark Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in outdoor_info.results %}
-            <div class="card" style="width: 18rem;">
-                <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
-                <a href="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" class="btn btn-primary">Add to Itinerary</a>
-                <a href="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}" class="btn btn-danger">Remove from Itinerary</a>
-                <div class="card-body">
-                    <h5 class="card-title">{{ place.name }}</h5>
-                    <p class="card-text">{{ place.location.formatted_address }}</p>
-                </div>
-                <div class="card-footer">
-                    {{ place.categories.0.name }}
-                </div>
+        <div class="card" style="width: 18rem; position: relative;">
+            <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
+                <button class="btn btn-primary itinerary-toggle" 
+                data-in-itinerary="{% if place.name in itinerary_items %}true{% else %}false{% endif %}" 
+                data-url-add="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" 
+                data-url-remove="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}">
+                {% if place.name in itinerary_items %}Remove from Itinerary{% else %}Add to Itinerary{% endif %}
+                </button>
+            <div class="card-body">
+                <h5 class="card-title">{{ place.name }}</h5>
+                <p class="card-text">{{ place.location.formatted_address }}</p>
             </div>
+            <div class="card-footer">
+                {{ place.categories.0.name }}
+            </div>
+        </div>
         {% endfor %}
     </div>
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Arts Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in arts_info.results %}
-            <div class="card" style="width: 18rem;">
-                <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
-                <a href="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" class="btn btn-primary">Add to Itinerary</a>
-                <a href="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}" class="btn btn-danger">Remove from Itinerary</a>
-                <div class="card-body">
-                    <h5 class="card-title">{{ place.name }}</h5>
-                    <p class="card-text">{{ place.location.formatted_address }}</p>
-                </div>
-                <div class="card-footer">
-                    {{ place.categories.0.name }}
-                </div>
+        <div class="card" style="width: 18rem; position: relative;">
+            <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
+                <button class="btn btn-primary itinerary-toggle" 
+                data-in-itinerary="{% if place.name in itinerary_items %}true{% else %}false{% endif %}" 
+                data-url-add="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" 
+                data-url-remove="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}">
+                {% if place.name in itinerary_items %}Remove from Itinerary{% else %}Add to Itinerary{% endif %}
+                </button>
+            <div class="card-body">
+                <h5 class="card-title">{{ place.name }}</h5>
+                <p class="card-text">{{ place.location.formatted_address }}</p>
             </div>
+            <div class="card-footer">
+                {{ place.categories.0.name }}
+            </div>
+        </div>
         {% endfor %}
     </div>
     {% if airport_info.results %}
  
-            <h2 style="margin: 4rem 0 1rem 1rem;">Airports</h2>
-            <div class="d-flex flex-wrap" style="margin: 1rem;">
-                {% for place in airport_info.results %}
-                    <div class="card" style="width: 18rem;">
-                        <img class="airport-info-img" src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
-                        <a href="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" class="btn btn-primary">Add to Itinerary</a>
-                        <a href="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}" class="btn btn-danger">Remove from Itinerary</a>
-                        <div class="card-body">
-                            <h5 class="card-title" style="font-size: 0.75rem">{{ place.name }}</h5>
-                            <p class="card-text" style="font-size: 1rem;">{{ place.location.formatted_address }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
+    <h2 style="margin: 4rem 0 1rem 1rem;">Airports</h2>
+    <div class="d-flex flex-wrap" style="margin: 1rem;">
+        {% for place in airport_info.results %}
+        <div class="card" style="width: 18rem; position: relative;">
+            <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
+                <button class="btn btn-primary itinerary-toggle" 
+                data-in-itinerary="{% if place.name in itinerary_items %}true{% else %}false{% endif %}" 
+                data-url-add="{% url 'info:add_to_itinerary' city=city spot_name=place.name address=place.location.formatted_address category=place.categories.0.name %}" 
+                data-url-remove="{% url 'info:remove_from_itinerary' city=city spot_name=place.name %}">
+                {% if place.name in itinerary_items %}Remove from Itinerary{% else %}Add to Itinerary{% endif %}
+                </button>
+            <div class="card-body">
+                <h5 class="card-title">{{ place.name }}</h5>
+                <p class="card-text">{{ place.location.formatted_address }}</p>
             </div>
- 
+            <div class="card-footer">
+                {{ place.categories.0.name }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
  
     <div class="container" id="comments" style="padding: 4px;">
@@ -437,28 +420,33 @@
     }
 
     document.addEventListener('click', function(e) {
-    // Adjust this to match your button's class
-    if (e.target.classList.contains('btn-primary')) {
-        e.preventDefault(); // Prevent the default link behavior
+    if (e.target.classList.contains('itinerary-toggle')) {
+        e.preventDefault(); // Prevent default action
 
-        const url = e.target.getAttribute('href');
+        const button = e.target;
+        const isInItinerary = button.getAttribute('data-in-itinerary') === 'true';
+        const url = isInItinerary ? button.getAttribute('data-url-remove') : button.getAttribute('data-url-add');
 
         // Make the AJAX request
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Show the modal if the response is successful
-                    const modal = document.getElementById('itinerarySuccessModal');
-                    modal.style.display = 'block';
-                } else {
-                    const modal = document.getElementById('itineraryPresentModal');
-                    modal.style.display = 'block';
+                    // Toggle the button text
+                    button.textContent = isInItinerary ? 'Add to Itinerary' : 'Remove from Itinerary';
+                    button.setAttribute('data-in-itinerary', !isInItinerary);
+                    
+                    // Optionally show a modal or message
+                    const modal = document.createElement('div');
+                    modal.textContent = isInItinerary ? 'Removed from itinerary!' : 'Added to itinerary!';
+                    document.body.appendChild(modal);
+                    setTimeout(() => modal.remove(), 2000); // Remove after 2 seconds
                 }
             })
-                    .catch(error => console.error('Fetch error:', error)); // Log fetch errors
-        }
-    });
+            .catch(error => console.error('Fetch error:', error));
+    }
+});
+
 
         // Function to close the modal
     function closeModal() {
