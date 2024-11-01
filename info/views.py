@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import pytz
+import googlemaps
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
@@ -16,7 +17,37 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count
 from .models import ItineraryItem
+import os
 
+gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
+@require_http_methods(["GET"])
+@login_required
+def drop_pin(request):
+    print("FIRE")
+    """Drops a pin on a specified location and returns its details."""
+    location = request.GET.get("location")  # Expecting a location name or address
+    if not location:
+        return JsonResponse({"error": "No location provided"}, status=400)
+
+    try:
+        # Geocode the location to get the latitude and longitude
+        geocode_result = gmaps.geocode(location)
+        if not geocode_result:
+            return JsonResponse({"error": "Location not found"}, status=404)
+
+        # Extracting latitude and longitude
+        lat_lng = geocode_result[0]['geometry']['location']
+        latitude = lat_lng['lat']
+        longitude = lat_lng['lng']
+
+        # Return the location details as JSON response
+        return JsonResponse({
+            "location": location,
+            "latitude": latitude,
+            "longitude": longitude,
+        })
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 @login_required()
 def addTofav(request):

@@ -18,4 +18,6 @@ urlpatterns = [
     path("api/search/", include(("search.urls", "search"), namespace="search")),  # URL for searching for a city
     path("api/info/", include(("info.urls", "info"), namespace="info")),  # URL for getting info on a city
     path("api/addToFav/", addTofav, name="addToFav"),  # URL for adding a city to a user's favorites
+    path('info/', include('info.urls')),  # URL to allow access to info URLs
 ]
+
