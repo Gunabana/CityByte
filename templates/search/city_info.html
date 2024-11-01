@@ -216,11 +216,12 @@
             frameborder="0" style="border:0; height: 100%; width: 100%;" 
             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q=charlotte"
         ></iframe>
+        <h4 id ="address">Tdefff</h4>
  <!---->
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Rated Dining Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in dining_info.results %}
-            <div class="card" style="width: 18rem;">
+            <div onclick="setLoc('{{ place.location.formatted_address }}')" class="card" style="width: 18rem;">
                 <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ place.name }}</h5>
@@ -235,7 +236,7 @@
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Landmark Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in outdoor_info.results %}
-            <div class="card" style="width: 18rem;">
+            <div onclick="setLoc('{{ place.location.formatted_address }}')" class="card" style="width: 18rem;">
                 <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ place.name }}</h5>
@@ -250,7 +251,7 @@
     <h2 style="margin: 4rem 0 1rem 1rem;">Top Arts Spots</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in arts_info.results %}
-            <div class="card" style="width: 18rem;">
+            <div onclick="setLoc('{{ place.location.formatted_address }}')"  class="card" style="width: 18rem;">
                 <img src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ place.name }}</h5>
@@ -267,7 +268,7 @@
             <h2 style="margin: 4rem 0 1rem 1rem;">Airports</h2>
             <div class="d-flex flex-wrap" style="margin: 1rem;">
                 {% for place in airport_info.results %}
-                    <div class="card" style="width: 18rem;">
+                    <div onclick="setLoc('{{ place.location.formatted_address }}')"  class="card" style="width: 18rem;">
                         <img class="airport-info-img" src="{% url 'info:place_photo' %}?fsq_id={{ place.fsq_id }}" class="card-img-top" alt="{{ place.name }}">
                         <div class="card-body">
                             <h5 class="card-title" style="font-size: 0.75rem">{{ place.name }}</h5>
@@ -313,7 +314,8 @@
  
 <script>
     // if in fav list remove checked else keep it
-    setMap()
+    cityval = "{{city}}"+"+"+"{{country}}"
+    setMap(cityval)
     var favBtn = document.getElementById("fav-toggle");
     var cityval = "";
     {% if isInFav %}
@@ -331,12 +333,20 @@
             console.log("Booo");
             });
         favBtn.classList.toggle("checked");
- 
+    }
+    function sanitizeAddress(address) {
+        return address.replace(/[^a-zA-Z0-9 ]/g, " "); 
+    }
+    function setLoc(address){
+        setMap(address);
+        var target = document.getElementById("map");
+        window.scrollTo({ top: target.offsetTop, behavior: 'smooth'})
     }
   
-    function setMap() {
-        cityval = "{{city}}"+"+"+"{{country}}"
-  document.getElementById("map").src ="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q="+cityval;
+    function setMap(address) {
+       address = sanitizeAddress(address);
+       document.getElementById("address").innerHTML = address;
+  document.getElementById("map").src ="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q="+address;
 }
 </script>
  

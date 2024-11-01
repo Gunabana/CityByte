@@ -1,4 +1,7 @@
 from urllib import request
+import unittest
+import requests
+import re
 from django.test import TestCase
 from info.helpers.places import FourSquarePlacesHelper
 from django.shortcuts import render
@@ -140,3 +143,55 @@ class CityByte_testcase(TestCase):
         self.client = Client()
         response = self.client.get(reverse("info:place_photo"))
         self.assertTrue(200, response.status_code)
+    """def test_map_src_in_template(self):
+    
+        response = self.client.get(self)
+        self.assertContains(response, 'src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q=Charlotte+US')
+    def setUp(self):
+        # This URL is just an example. Replace it with your own.
+        self.api_key = "https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI"
+        self.location = "charlotte"
+        self.url = f"https://www.google.com/maps/embed/v1/place?key={self.api_key}&q={self.location}"
+
+    def test_map_response(self):
+        # Send a GET request to the Google Maps embed URL
+        response = requests.get(self.url)
+        
+        # Check if the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+   
+    def test_sanitize_address_function(self):
+        
+        # Since this is a JS function, you can test it via the output to the address field
+        address = '123 Main St.!@#$%^&*()'
+        sanitized_address = re.sub('[^0-9a-zA-Z]+', ' ',address)  # Expected behavior
+        self.assertEqual(sanitized_address, '123 Main St.       ')  # Spaces where special chars were"""
+
+class TestGoogleMapsAPI(TestCase):
+    def test_city_info(self):
+        assert render(request, "search/search.html").status_code == 200
+    def setUp(self):
+        self.api_key = "AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI"
+        self.location = "Myrtle Beach US"
+        self.url = f"https://www.google.com/maps/embed/v1/place?key={self.api_key}&q={self.location}"
+
+    def test_map_response(self):
+        # Send a GET request to the Google Maps embed URL
+        response = requests.get(self.url)
+        
+        # Check if the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Optionally, check if the content-type of the response is as expected
+        self.assertIn("text/html", response.headers["Content-Type"])
+    def test_sanitize_address_function(self):
+    
+        # Since this is a JS function, you can test it via the output to the address field
+        address = '123 Main St.!@#$%^&*()'
+        sanitized_address = re.sub('[^0-9a-zA-Z]+', ' ',address)  # Expected behavior
+        self.assertEqual(sanitized_address, '123 Main St')  # Spaces where special chars were"""
+    
+
+
+

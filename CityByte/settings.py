@@ -179,7 +179,8 @@ WEATHER_BIT_CONFIG = {
         "X-RapidAPI-Host": env("WEATHER_BIT_X_RAPID_API_HOST"),
     },
 }
-
+google_cloud_key = os.getenv("GOOGLE_CLOUD_API_KEY")
+print(google_cloud_key)  # Should print your Google Cloud key
 
 LOGIN_REDIRECT_URL = "/"
 STATIC_URL = "static/"
