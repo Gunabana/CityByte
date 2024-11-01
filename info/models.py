@@ -29,6 +29,7 @@ class FavCityEntry(models.Model):
     def __str__(self):
         return f"{self.city}-{self.country}-{self.user.username}"
 
+
 class ItineraryItem(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     city = models.CharField(max_length=100)

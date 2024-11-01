@@ -7,6 +7,7 @@ class TestUrls(SimpleTestCase):
     """
     Test URL resolution for the 'info' application.
     """
+
     def test_profile_page(self):
         """
         Test that the 'profile_page' URL resolves to the correct view.
