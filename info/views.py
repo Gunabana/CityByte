@@ -22,41 +22,45 @@ import os
 @require_http_methods(["GET"])
 @login_required
 def map_view(request):
+    """
+    Render the map in the HTML
+    """
     return render(request, 'city_info.html')
 
 @require_http_methods(["GET"])
 @login_required
 def google_maps_api(request):
+    """
+    Makes a request to the Google Maps API (needed to hide the API key)
+    """
     api_key = os.getenv("GOOGLE_API_KEY")
     script_url = f"https://maps.googleapis.com/maps/api/js?key={api_key}"
     return JsonResponse({"script": script_url})
 
-gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
+
 @require_http_methods(["GET"])
 @login_required
 def drop_pin(request):
-    print("\n\n\n Request\n", request, "\n\n\n")
-    print("\n\n\n Request Location\n", request.GET.get("location"), "\n\n\n")
-    """Drops a pin on a specified location and returns its details."""
+    """
+    Drops a pin on a specified location and returns its details.
+    """
     location = request.GET.get("location")  # Expecting a location name or address
     if not location:
         return JsonResponse({"error": "No location provided"}, status=400)
 
     try:
+        gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
         geocode_result = gmaps.geocode(location)
-        print(geocode_result)
         if not geocode_result:
             return JsonResponse({"error": "Location not found"}, status=404)
 
         lat_lng = geocode_result[0]['geometry']['location']
-        print(lat_lng)
         return JsonResponse({
             "location": location,
             "latitude": lat_lng['lat'],
             "longitude": lat_lng['lng'],
         })
     except Exception as e:
-        print("Exception")
         return JsonResponse({"error": str(e)}, status=500)
 
 @login_required()
@@ -107,7 +111,6 @@ def info_page(request):
             form.author = request.user
             form.city = city
             form.country = country
-            print(form)
             form.save()
     commentForm = CommentForm()
     # if (

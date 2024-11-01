@@ -421,16 +421,16 @@
     var favBtn = document.getElementById("fav-toggle");
     {% if isInFav %}
         favBtn.classList.toggle("checked");
-        console.log("CHECKED")
+        // console.log("CHECKED")
     {% endif %}
     function favToggle(event){
         const url = "{% url 'addToFav' %}?city={{city}}&country={{country}}"
         fetch(url).then(function(response) {
             return response.json();
             }).then(function(data) {
-            console.log(data);
+            // console.log(data);
             }).catch(function() {
-            console.log("Booo");
+            // console.log("Booo");
             });
         favBtn.classList.toggle("checked");
  
