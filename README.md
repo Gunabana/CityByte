@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/Gunabana/CityByte/branch/main/graph/badge.svg?token=PCOHJETYCD)](https://codecov.io/gh/Gunabana/CityByte)
 [![code_size](https://img.shields.io/github/languages/code-size/Gunabana/CityByte)](https://github.com/Gunabana/CityByte) 
 [![repo_size](https://img.shields.io/github/repo-size/Gunabana/CityByte)](https://github.com/Gunabana/CityByte)
-[![DOI](https://zenodo.org/badge/878084377.svg)](https://doi.org/10.5281/zenodo.14015564)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14026837.svg)](https://doi.org/10.5281/zenodo.14026837)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/Gunabana/CityByte.svg)](https://GitHub.com/Gunabana/CityByte/issues/)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Gunabana/CityByte.svg)](https://GitHub.com/Gunabana/CityByte/issues?q=is%3Aissue+is%3Aclosed)
