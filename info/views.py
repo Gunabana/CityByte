@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count
+from .models import ItineraryItem
 
 
 @login_required()
@@ -163,5 +164,66 @@ def profile_page(request):
         .annotate(city_count=Count("city_name"))
         .order_by("-city_count")[:10]
     )
+    return render(
+        request,
+        "profile/profile.html",
+        {"favCities": favCities, "popularCities": popularCities},
+    )
 
-    return render(request, "profile/profile.html", {"favCities": favCities, "popularCities": popularCities})
+@login_required
+def add_to_itinerary(request, city, spot_name, address, category):
+    # if request.method != 'POST':
+    #     return JsonResponse({'error': 'Invalid request method.'}, status=405)
+    # # Validate inputs from the request body
+    # spot_name = request.POST.get('spot_name', spot_name)
+    # address = request.POST.get('address', address)
+    # category = request.POST.get('category', category)
+    # city = request.POST.get('city', city)
+    # if not spot_name: 
+    #     return JsonResponse({'error': 'Spot name cannot be empty.'}, status=400)
+    # if not city: 
+    #     return JsonResponse({'error': 'City cannot be empty.'}, status=400)
+    # if not spot_name: 
+    #     return JsonResponse({'error': 'Spot name cannot be empty.'}, status=400)
+    # if not address: 
+    #     return JsonResponse({'error': 'Address cannot be empty.'}, status=400)
+    # if not category: 
+    #     return JsonResponse({'error': 'Category cannot be empty.'}, status=400)
+    if not ItineraryItem.objects.filter(user=request.user, city=city, spot_name=spot_name).exists():
+        ItineraryItem.objects.create(
+            user=request.user,
+            city=city,
+            spot_name=spot_name,
+            address=address,
+            category=category
+        )
+        return JsonResponse({'status': 'success', 'message': 'Added to itinerary.'})
+    return JsonResponse({'status': 'error', 'message': 'Already in itinerary.'})
+
+@login_required
+def remove_from_itinerary(request, city, spot_name):
+    item = ItineraryItem.objects.filter(user=request.user, city=city, spot_name=spot_name).first()
+    
+    if item:
+        item.delete()
+        return JsonResponse({'status': 'success', 'message': 'Removed from itinerary.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Item not found.'}, status=404)
+
+@require_http_methods(["GET"])
+def itinerary_page(request):
+    city = request.GET.get("city")
+    country = request.GET.get("country")
+
+    # Fetch itinerary items for the user and city
+    itinerary_items = ItineraryItem.objects.filter(user=request.user, city=city).order_by("added_on")
+
+    return render(
+        request,
+        "search/itinerary.html",
+        context={
+            "itinerary": itinerary_items,
+            "city": city,
+            "country": country,
+        },
+    )
