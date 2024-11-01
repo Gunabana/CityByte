@@ -208,7 +208,7 @@
     </div>
  
     {% endif %}
-    <div  id="map-container" style="height: 60vh; width: 100%;"> <!-- Set remaining 50vh for map -->
+    <div  id="map-container" style="height: 60vh; width: 100%;"> <!--map -->
         <iframe
             id="map"
             loading="lazy"
@@ -335,15 +335,23 @@
         favBtn.classList.toggle("checked");
     }
     function sanitizeAddress(address) {
+        /* Removes any invalid characters from the address before being put into the url
+         in: address
+         out: address
+        */ 
         return address.replace(/[^a-zA-Z0-9 ]/g, " "); 
-    }
+    } 
     function setLoc(address){
+          /*  calls set map forces the page to scroll to the middle of the map
+          in address
+        */
         setMap(address);
         var target = document.getElementById("map");
         window.scrollTo({ top: target.offsetTop, behavior: 'smooth'})
     }
-  
     function setMap(address) {
+        // sets or updates the map element
+        // in: address
        address = sanitizeAddress(address);
        document.getElementById("address").innerHTML = address;
   document.getElementById("map").src ="https://www.google.com/maps/embed/v1/place?key=AIzaSyARlyaa0oivxKv8jtpx_wzt5fjh1XvoerI&q="+address;
