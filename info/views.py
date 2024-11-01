@@ -19,6 +19,7 @@ from django.db.models import Count
 from .models import ItineraryItem
 import os
 
+
 @require_http_methods(["GET"])
 @login_required
 def map_view(request):
@@ -26,6 +27,7 @@ def map_view(request):
     Render the map in the HTML
     """
     return render(request, 'city_info.html')
+
 
 @require_http_methods(["GET"])
 @login_required
@@ -62,6 +64,7 @@ def drop_pin(request):
         })
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
 
 @login_required()
 def addTofav(request):
