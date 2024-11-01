@@ -136,13 +136,10 @@ Concerns with the software? Please get in touch with us via one of the methods b
 
 Please contact us if you experience any problems with the program, such as problems with joining up, logging in, or any other functions.
 
-<a href = "mailto:citybyte.support@proton.me">
+<a href = "gunabanagroup@gmail.com">
 <img width = "35px" src = "https://user-images.githubusercontent.com/73664200/194786335-12b1d3a6-b272-4896-9bd7-d615e28847f3.png"/>
 </a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href = "https://twitter.com/CityByteSupport">  
-<img width = "35px" src = "https://raw.githubusercontent.com/peterthehan/peterthehan/master/assets/twitter.svg"/>
-</a> 
 
 # CityByte Project 1
 
