@@ -48,7 +48,7 @@ def drop_pin(request):
     """
     location = request.GET.get(
         "location"
-    )
+    )  # Expecting a location name or address
     if not location:
         return JsonResponse({"error": "No location provided"}, status=400)
 
