@@ -63,6 +63,10 @@ Create an account in the below websites to Fetch API keys and use them in the ab
 8. After this, you will be shown your Client ID and Client secret
 9. Add `GOOGLE_OAUTH2_ID=""` and `GOOGLE_OAUTH2_SECRET=""` to the .env file with the Client ID and Client secret within their respective quotes
 10. Add the Client ID to `data-client_id=""` in login.html
+11. Follow <a href="https://developers.google.com/maps/get-started#create-project"> the guide </a> for registering for Google Maps API access. (While it does require credit
+card registration, they will not let you exceed the free limit unless you prepay
+or enable charges to your account; the free version allows $200 in credit each month)
+12. Add `GOOGLE_API_KEY=""` to the .env file with the new API key
 
 #### 6. Set-up REDIS
 * Follow the instructions in [Getting Started](https://redis.io/docs/getting-started/) to Install Redis in your local environment.

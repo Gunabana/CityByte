@@ -19,34 +19,44 @@ from django.db.models import Count
 from .models import ItineraryItem
 import os
 
+@require_http_methods(["GET"])
+@login_required
+def map_view(request):
+    return render(request, 'city_info.html')
+
+@require_http_methods(["GET"])
+@login_required
+def google_maps_api(request):
+    api_key = os.getenv("GOOGLE_API_KEY")
+    script_url = f"https://maps.googleapis.com/maps/api/js?key={api_key}"
+    return JsonResponse({"script": script_url})
+
 gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
 @require_http_methods(["GET"])
 @login_required
 def drop_pin(request):
-    print("FIRE")
+    print("\n\n\n Request\n", request, "\n\n\n")
+    print("\n\n\n Request Location\n", request.GET.get("location"), "\n\n\n")
     """Drops a pin on a specified location and returns its details."""
     location = request.GET.get("location")  # Expecting a location name or address
     if not location:
         return JsonResponse({"error": "No location provided"}, status=400)
 
     try:
-        # Geocode the location to get the latitude and longitude
         geocode_result = gmaps.geocode(location)
+        print(geocode_result)
         if not geocode_result:
             return JsonResponse({"error": "Location not found"}, status=404)
 
-        # Extracting latitude and longitude
         lat_lng = geocode_result[0]['geometry']['location']
-        latitude = lat_lng['lat']
-        longitude = lat_lng['lng']
-
-        # Return the location details as JSON response
+        print(lat_lng)
         return JsonResponse({
             "location": location,
-            "latitude": latitude,
-            "longitude": longitude,
+            "latitude": lat_lng['lat'],
+            "longitude": lat_lng['lng'],
         })
     except Exception as e:
+        print("Exception")
         return JsonResponse({"error": str(e)}, status=500)
 
 @login_required()
