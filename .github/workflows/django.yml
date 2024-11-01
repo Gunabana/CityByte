@@ -4,11 +4,11 @@ on:
   push:
     branches: 
       - main
-      - *
+      - Tristan/maps 
   pull_request:
     branches:
       - main
-      - *
+      - Tristan/maps
 
 jobs:
   build:
