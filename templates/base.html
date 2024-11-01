@@ -20,45 +20,45 @@
             border: none;
             background-color: #3F3F3F;
         }
-
+    
         /* Navbar and dropdown styling */
         .navbar {
             padding: 1rem 2rem;
         }
-
+    
         .navbar-brand {
             font-size: 2.5rem;
             font-weight: bold;
             color: #fff;
         }
-
+    
         .navbar-dark .navbar-nav .nav-link {
-            font-size: 1.5rem;
+            font-size: 1.5rem; /* Ensure both links have the same font size */
             font-weight: bold;
             color: #ddd;
             padding: 0.8rem 1.5rem;
         }
-
+    
         .navbar-dark .navbar-nav .nav-link:hover,
         .navbar-dark .navbar-nav .nav-link.active {
             color: #fff;
             background-color: #555;
             border-radius: 5px;
         }
-
+    
         .dropdown-menu {
             background-color: #444;
         }
-
+    
         .dropdown-item {
             color: #ddd;
         }
-
+    
         .dropdown-item:hover {
             background-color: #555;
             color: #fff;
         }
-
+    
         /* Alert styling */
         .alert-primary {
             color: #fff;
@@ -89,15 +89,15 @@
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Search</a>
                 </li>
-
+    
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" style="font-size: 2rem; font-weight: bolder; padding: 1rem 3rem;">
+                        aria-haspopup="true" aria-expanded="false">
                         Settings
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{% url 'profile_page' %}">Profile</a>
-                        <a class="dropdown-item" href="{%url 'sign_out' %}">Logout</a>
+                        <a class="dropdown-item" href="{% url 'sign_out' %}">Logout</a>
                     </div>
                 </li>
             </ul>

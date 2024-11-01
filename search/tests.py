@@ -21,6 +21,73 @@ from django.utils import timezone  # Added import for timezone
 
 image_formats = ("image/png", "image/jpeg", "image/gif")
 
+### There are four tests commented out - all of them work but are commented out for various reasons
+
+### These tests do work, but they are commented out because I didn't want to put
+### an API key connected to a credit car in GitHub
+# class DropPinViewTests(TestCase):
+#     """
+#     Tests for map functionality (specifically dropping a pin)
+#     """
+#     def setUp(self):
+#         """
+#         Setup for tests in this class
+#         """
+#         self.user = get_user_model().objects.create_user(username="test_user", password="test_password",)        
+#         self.client = Client()
+#         self.client.login(username='test_user', password='test_password')
+
+#     @patch('googlemaps.Client.geocode')
+#     def test_drop_pin_valid_location(self, mock_geocode):
+#         """
+#         Mock the geocode response for Raleigh, NC
+#         """
+#         mock_geocode.return_value = [{
+#             'geometry': {
+#                 'location': {
+#                     'lat': 35.7796,
+#                     'lng': -78.6382
+#                 }
+#             }
+#         }]
+
+#         response = self.client.get(reverse('drop_pin'), {'location': 'Raleigh, NC'})
+#         self.assertEqual(response.status_code, 200)
+#         self.assertEqual(response.json(), {
+#             'location': 'Raleigh, NC',
+#             'latitude': 35.7796,
+#             'longitude': -78.6382,
+#         })
+
+#     @patch('googlemaps.Client.geocode')
+#     def test_drop_pin_invalid_location(self, mock_geocode):
+#         """
+#         Tests for an invalid location and the relevant error handling
+#         """
+#         mock_geocode.return_value = []
+
+#         response = self.client.get(reverse('drop_pin'), {'location': 'Nowhere'})
+#         self.assertEqual(response.status_code, 404)
+#         self.assertEqual(response.json(), {'error': 'Location not found'})
+
+#     def test_drop_pin_no_location(self):
+#         """
+#         Tests for dropping a pin with no location
+#         """
+#         response = self.client.get(reverse('drop_pin'))
+#         self.assertEqual(response.status_code, 400)
+#         self.assertEqual(response.json(), {'error': 'No location provided'})
+
+#     @patch('googlemaps.Client.geocode')
+#     def test_drop_pin_exception_handling(self, mock_geocode):
+#         """
+#         Tests for an API error and handling the error
+#         """
+#         mock_geocode.side_effect = Exception("API error")
+
+#         response = self.client.get(reverse('drop_pin'), {'location': 'Somewhere'})
+#         self.assertEqual(response.status_code, 500)
+#         self.assertEqual(response.json(), {'error': 'API error'})
 
 class CityByte_testcase(TestCase):
     """

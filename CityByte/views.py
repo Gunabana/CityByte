@@ -13,9 +13,8 @@ from google.auth.transport import requests
 
 
 class SignUpView(generic.CreateView):
-    """
-    Sign up form the creates a user; ensures certain critera is met (defined in /CityByte/settings.py)
-    """
+    """Sign up form the creates a user; ensures certain critera is met (defined in /CityByte/settings.py)."""
+
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
@@ -23,26 +22,26 @@ class SignUpView(generic.CreateView):
 
 @csrf_exempt
 def sign_in(request):
-    """
-    A function to sign users in
-    """
+    """Signs users in."""
     return render(request, "login.html")
 
 
 @csrf_exempt
 def auth_receiver(request):
-    """
-    An authentication  reciever to allow Google sign-ins
-    """
+    """Allow Google sign-ins."""
     if request.method == "POST":
         if "credential" not in request.POST:
             return JsonResponse({"error": "Missing credential"}, status=403)
         token = request.POST["credential"]
 
-    time.sleep(1)  # delay is needed in order to ensure creation of token before retrieving user's data
+    time.sleep(
+        1
+    )  # delay is needed in order to ensure creation of token before retrieving user's data
 
     try:
-        user_data = id_token.verify_oauth2_token(token, requests.Request(), os.environ["GOOGLE_OAUTH2_ID"])
+        user_data = id_token.verify_oauth2_token(
+            token, requests.Request(), os.environ["GOOGLE_OAUTH2_ID"]
+        )
     except ValueError:
         return HttpResponse(status=403)
 
@@ -52,7 +51,12 @@ def auth_receiver(request):
 
     # Get or create the user
     user, created = User.objects.get_or_create(
-        username=email, defaults={"email": email, "first_name": first_name, "last_name": last_name}
+        username=email,
+        defaults={
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name,
+        },
     )
 
     login(request, user)
@@ -62,9 +66,7 @@ def auth_receiver(request):
 
 
 def sign_out(request):
-    """
-    Signs out a user by deleting their session for the particular user; function works for Google and normal signouts
-    """
+    """Signs out a user by deleting their session for the particular user; function works for Google and normal signouts."""
     if "user_data" in request.session:
         del request.session["user_data"]
     logout(request)
