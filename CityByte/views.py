@@ -1,10 +1,8 @@
 import os
 import time
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
-
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse, JsonResponse
@@ -15,6 +13,9 @@ from google.auth.transport import requests
 
 
 class SignUpView(generic.CreateView):
+    """
+    Sign up form the creates a user; ensures certain critera is met (defined in /CityByte/settings.py)
+    """
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
@@ -22,11 +23,17 @@ class SignUpView(generic.CreateView):
 
 @csrf_exempt
 def sign_in(request):
+    """
+    A function to sign users in
+    """
     return render(request, "login.html")
 
 
 @csrf_exempt
 def auth_receiver(request):
+    """
+    An authentication  reciever to allow Google sign-ins
+    """
     if request.method == "POST":
         if "credential" not in request.POST:
             return JsonResponse({"error": "Missing credential"}, status=403)
@@ -55,6 +62,9 @@ def auth_receiver(request):
 
 
 def sign_out(request):
+    """
+    Signs out a user by deleting their session for the particular user; function works for Google and normal signouts
+    """
     if "user_data" in request.session:
         del request.session["user_data"]
     logout(request)

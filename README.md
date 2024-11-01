@@ -10,6 +10,7 @@
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Gunabana/CityByte.svg)](https://GitHub.com/Gunabana/CityByte/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub version](https://img.shields.io/github/v/release/Gunabana/CityByte)](https://github.com/Gunabana/CityByte/releases)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code linting: flake8](https://img.shields.io/badge/code%20linting-flake8-blue.svg)](https://flake8.pycqa.org/en/latest/)
 
 
 ## Introduction
@@ -187,6 +188,9 @@ This project is deployed on AWS and is live at http://3.88.233.194:8000/
 * Caching results from API using Redis in order to improve the performance.
 * Addition of search bar with category filter, that will help the user to search based on his/ her requirements.
 * To run multiple API requests simultaneously, multithreading will be used.
+
+## Need Assistance?
+If you're interested in using CityByte and need help, please send an email to bbond@ncsu.edu or via the contact info on Brody's GutHub.
 
 ## Current Team Members
 * Brody Bond - bbond
