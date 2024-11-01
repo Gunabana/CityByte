@@ -23,6 +23,9 @@ image_formats = ("image/png", "image/jpeg", "image/gif")
 
 
 class CityByte_testcase(TestCase):
+    """
+    Class that tests general CityByte functionality
+    """
     def setUp(self):
         """
         Setup for tests in this class
@@ -75,11 +78,11 @@ class CityByte_testcase(TestCase):
                 .strftime("%I:%M")
             )
             weather_info["ts"] = datetime.fromtimestamp(weather_info["ts"]).strftime("%m-%d-%Y, %H:%M")
-            
+
             assert weather_info is not None  # Ensure we got weather info
 
         except Exception:
-            pytest.fail("Weather API call failed or returned no data.")
+            self.fail("Weather API call failed or returned no data.")
 
     def test_dining_info(self):
         """
@@ -302,6 +305,9 @@ class ItineraryTests(TestCase):
 
 
 class AuthTests(TestCase):
+    """
+    Tests that relate to log-in and log-out functionality
+    """
     def setUp(self):
         """
         Setup for tests in this class
@@ -377,6 +383,9 @@ class AuthTests(TestCase):
 
 
 class AuthErrorTests(TestCase):
+    """
+    Tests that cause failures relating to log-in/log-out and ensure there is error handling
+    """
     def setUp(self):
         """
         Setup for tests in this class
@@ -495,7 +504,9 @@ class AuthErrorTests(TestCase):
 
 
 class InfoViewsTestCase(TestCase):
-
+    """
+    Tests relating to info/views.py
+    """
     def setUp(self):
         """
         Setup for tests in this class
