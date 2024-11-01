@@ -14,12 +14,19 @@ from django.contrib.auth import get_user_model
 @login_required
 @require_http_methods(["GET"])
 def main_page(request):
+    """
+    Loads the home page
+    """
     user_count = get_user_model().objects.all().count()
+
     return render(request, "search/search.html", context={"request": request, "userCount": user_count})
 
 
 @require_http_methods(["GET"])
 def city_suggestions(request):
+    """
+    Retrieves a list of suggested cities if multiple meet the criteria
+    """
     suggestions_data = GenericDBSearchAutoCompleteHelper(
         klass=AmadeusCitySearch, url=URL(**settings.AMADEUS_CONFIG)
     ).get_suggestions(city=request.GET.get("q"), max=10)
@@ -29,5 +36,8 @@ def city_suggestions(request):
 
 @require_http_methods(["GET"])
 def city_photo(request):
+    """
+    Retrieves the photo for a city
+    """
     photo_link = UnplashCityPhotoHelper().get_city_photo(city=request.GET.get("q"))
     return JsonResponse({"path": photo_link})

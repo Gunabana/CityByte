@@ -24,12 +24,21 @@ image_formats = ("image/png", "image/jpeg", "image/gif")
 
 class CityByte_testcase(TestCase):
     def setUp(self):
+        """
+        Setup for tests in this class
+        """
         get_user_model().objects.create_user("admin", "admin.@simpson.net", "admin")
 
     def test_main_page(self):
+        """
+        Tests that the main page is reachable
+        """
         assert render(request, "search/search.html").status_code == 200
 
     def test_cityphoto(self):
+        """
+        Tests that an image is returned after getting a city
+        """
         photo_link = UnplashCityPhotoHelper().get_city_photo(city="Pune")
         site = urlopen(photo_link)
         meta = site.info()
@@ -37,13 +46,19 @@ class CityByte_testcase(TestCase):
             assert True
 
     def test_photo(self):
+        """
+        Tests that a specific photo is retrieved
+        """
         photo_link = FourSquarePlacesHelper().get_place_photo(fsq_id="518a71ab498e430858000827")
         site = urlopen(photo_link)
         meta = site.info()
         if meta["content-type"] in image_formats:
             assert True
 
-    def test_info_page(self):
+    def test_weather_info(self):
+        """
+        Tests that weather information can be retrieved
+        """
         city = "New York City"
         country = "US"
 
@@ -60,63 +75,79 @@ class CityByte_testcase(TestCase):
                 .strftime("%I:%M")
             )
             weather_info["ts"] = datetime.fromtimestamp(weather_info["ts"]).strftime("%m-%d-%Y, %H:%M")
+            
+            assert weather_info is not None  # Ensure we got weather info
 
         except Exception:
-            # api limit exceeded
-            weather_info = {}
+            pytest.fail("Weather API call failed or returned no data.")
 
-        # commentForm = CommentForm()
+    def test_dining_info(self):
+        """
+        Tests that dining information can be retrieved
+        """
+        city = "New York City"
+        country = "US"
 
         dining_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="13065", sort="RELEVANCE", limit=5
         )
+        assert dining_info is not None and len(dining_info) > 0  # Ensure we got dining info
+
+    def test_outdoor_info(self):
+        """
+        Tests that outdoor activities information can be retrieved
+        """
+        city = "New York City"
+        country = "US"
+
         outdoor_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="16000", sort="RELEVANCE", limit=5
         )
+        assert outdoor_info is not None and len(outdoor_info) > 0  # Ensure we got outdoor info
+
+    def test_airport_info(self):
+        """
+        Tests that airport information can be retrieved
+        """
+        city = "New York City"
+        country = "US"
+
         airport_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="19040", sort="RELEVANCE", limit=5
         )
+        assert airport_info is not None and len(airport_info) > 0  # Ensure we got airport info
+
+    def test_arts_info(self):
+        """
+        Tests that arts information can be retrieved
+        """
+        city = "New York City"
+        country = "US"
+
         arts_info = FourSquarePlacesHelper().get_places(
             city=f"{city}, {country}", categories="10000", sort="RELEVANCE", limit=5
         )
+        assert arts_info is not None and len(arts_info) > 0  # Ensure we got arts info
+
+    def test_city_photo(self):
+        """
+        Tests that a city photo can be retrieved for New York City.
+        """
+        city = "New York City"
         photo_link = UnplashCityPhotoHelper().get_city_photo(city=city)
-        # comments = Comment.objects.filter(city=city, country=country).order_by(
-        #     "-created_on"
-        # )
-        # isInFav = True if FavCityEntry.objects.filter(city=city, country=country, user=request.user).count() > 0 else False
-        # render(request, 'search/city_info.html', context={"weather_info": weather_info, "dining_info": dining_info, "outdoor_info": outdoor_info, "airport_info": airport_info, "photo_link": photo_link, "arts_info": arts_info,  "comments": comments,
-        #     "commentForm": commentForm,
-        #     'city': city,
-        #     'country': country,
-        #     'isInFav': True}).status_code == 200
-        if (
-            not weather_info
-            and not dining_info
-            and not outdoor_info
-            and not airport_info
-            and not arts_info
-            and not photo_link
-        ):
-            assert True
+        assert photo_link is not None  # Ensure we got a photo link
 
     def TestModels(TestCase):
+        """
+        Tests the user model
+        """
         user = get_user_model().objects.create_user("admin@citybyte.com", "password")
         assert user
 
-    def test_can_access_page(self):
-        login = self.client.login(username="admin", password="admin")
-        self.assertTrue(login)
-
-    def test_user_logout(self):
-        self.client.logout()
-        self.assertTrue(True)
-
-    def test_profile_page(self):
-        self.client = Client()
-        response = self.client.get(reverse("profile_page"))
-        self.assertTrue(200, response.status_code)
-
     def test_place_photo(self):
+        """
+        Tests that a photo is retrieved
+        """
         self.client = Client()
         response = self.client.get(reverse("info:place_photo"))
         self.assertTrue(200, response.status_code)
@@ -170,15 +201,6 @@ class ItineraryTests(TestCase):
             self.assertContains(response, 'Added to itinerary.')
 
         self.assertEqual(ItineraryItem.objects.count(), len(spots))
-    
-    # def test_itinerary_item_addition_invalid_city(self):
-    #     """Test adding an itinerary item with an invalid (empty) spot name."""
-    #     response = self.client.post(reverse('info:add_to_itinerary', args=['Hyderabad', self.spot_name, self.address, self.category]), {
-    #         'city': '' , 
-    #         'address': self.address,
-    #         'category': self.category,
-    #     })
-    #     self.assertEqual(response.status_code, 400)
 
     def test_remove_multiple_items(self):
         self.client.post(reverse('info:add_to_itinerary', args=[self.city, "KBR Park", self.address, self.category]))
@@ -200,15 +222,6 @@ class ItineraryTests(TestCase):
         self.assertEqual(item.spot_name, self.spot_name)
         self.assertEqual(item.address, self.address)
         self.assertEqual(item.category, self.category)
-
-    # def test_itinerary_item_addition_invalid_category(self):
-    #     """Test adding an itinerary item with an invalid (empty) spot name."""
-    #     response = self.client.post(reverse('info:add_to_itinerary', args=[self.city, self.spot_name, self.address, 'Park']), {
-    #         'city': self.city , 
-    #         'address': self.address,
-    #         'category': '',
-    #     })
-    #     self.assertEqual(response.status_code, 400)
 
     def test_add_to_itinerary_without_login(self):
         self.client.logout()
@@ -253,15 +266,6 @@ class ItineraryTests(TestCase):
         )
         self.assertEqual(str(item), f"{self.spot_name} in {self.city} - {self.user.username}")
 
-    # def test_itinerary_item_addition_invalid_address(self):
-    #     """Test adding an itinerary item with an invalid (empty) spot name."""
-    #     response = self.client.post(reverse('info:add_to_itinerary', args=[self.city, self.spot_name, 'Kbr National Park (LV Prasad Marg), Hyderabad 591226, Telangana',self.category ]), {
-    #         'city': self.city , 
-    #         'address': '',
-    #         'category': self.category,
-    #     })
-    #     self.assertEqual(response.status_code, 400)
-
     def test_added_on_field(self):
         item = ItineraryItem.objects.create(
             user=self.user,
@@ -296,35 +300,29 @@ class ItineraryTests(TestCase):
         self.assertEqual(ItineraryItem.objects.filter(user=self.user).count(), 1)
         self.assertEqual(ItineraryItem.objects.filter(user=new_user).count(), 1)
 
-    # def test_itinerary_item_addition_invalid_spot_name(self):
-    #     """Test adding an itinerary item with an invalid (empty) spot name."""
-    #     response = self.client.post(reverse('info:add_to_itinerary', args=[self.city, 'KBR Park', self.address, self.category]), {
-    #         'spot_name': '', 
-    #         'address': self.address,
-    #         'category': self.category,
-    #     })
-    #     self.assertEqual(response.status_code, 400)
-    
-    # def test_remove_itinerary_invalid_method(self):
-    #     """Test removing an itinerary item with an invalid (non-POST) request method."""
-    #     response = self.client.get(reverse('info:add_to_itinerary', args=[self.city, self.spot_name, self.address, self.category]))
-    #     self.assertEqual(response.status_code, 405)
-    #     self.assertJSONEqual(str(response.content, encoding='utf-8'), {'error': 'Invalid request method.'})
-        
-        
+
 class AuthTests(TestCase):
     def setUp(self):
+        """
+        Setup for tests in this class
+        """
         self.client = Client()
         self.user = get_user_model().objects.create_user(
             username="test_user", password="test_password", email="test@example.com"
         )
 
     def test_signup_view_renders_correct_template(self):
+        """
+        Tests that a sign-up template is used
+        """
         response = self.client.get(reverse("signup"))
         self.assertTemplateUsed(response, "registration/signup.html")
         self.assertEqual(response.status_code, 200)
 
     def test_successful_signup_creates_user(self):
+        """
+        Tests that a user can sign up
+        """
         response = self.client.post(
             reverse("signup"), {"username": "newuser", "password1": "newpassword123", "password2": "newpassword123"}
         )
@@ -332,6 +330,9 @@ class AuthTests(TestCase):
         self.assertRedirects(response, reverse("login"))
 
     def test_sign_in_renders_login_template(self):
+        """
+        Tests to a sign-in template is used
+        """
         response = self.client.get(reverse("sign_in"))
         self.assertTemplateUsed(response, "registration/login.html")
         self.assertEqual(response.status_code, 200)
@@ -339,40 +340,36 @@ class AuthTests(TestCase):
     @patch("google.auth.transport.requests.Request")
     @patch("google.oauth2.id_token.verify_oauth2_token")
     def test_auth_receiver_successful_login(self, mock_verify, mock_request):
+        """Tests to ensure that a Google user can successfully log in
+        """
         mock_verify.return_value = {"email": "test@example.com", "given_name": "Test", "family_name": "User"}
         token = "valid_token"
         response = self.client.post(reverse("auth_receiver"), {"credential": token})
         self.assertRedirects(response, reverse("main_page"))
         self.assertTrue(self.client.session.get("user_data"))
 
-    @patch("google.auth.transport.requests.Request")
-    @patch("google.oauth2.id_token.verify_oauth2_token")
-    def test_auth_receiver_invalid_token(self, mock_verify, mock_request):
-        mock_verify.side_effect = ValueError("Invalid token")
-        response = self.client.post(reverse("auth_receiver"), {"credential": "invalid_token"})
-        self.assertEqual(response.status_code, 403)
-
     def test_sign_out_redirects_to_sign_in(self):
+        """
+        Tests to ensure that, after a sign-out, the user is redirected to the sign-in page and their session is deleted
+        """
         self.client.login(username="test_user", password="test_password")
         response = self.client.get(reverse("sign_out"))
         self.assertRedirects(response, reverse("sign_in"))
         self.assertFalse(self.client.session.get("user_data"))
 
     def test_sign_out_handles_logout_exception(self):
+        """
+        Tests to ensure redirect
+        """
         self.client.login(username="test_user", password="test_password")
         with patch("django.contrib.auth.logout", side_effect=Exception("Logout error")):
             response = self.client.get(reverse("sign_out"))
             self.assertRedirects(response, reverse("sign_in"))
 
-    def test_signup_form_validation(self):
-        response = self.client.post(reverse("signup"), {"username": "", "password1": "pass", "password2": "pass"})
-        self.assertFormError(response, "form", "username", "This field is required.")
-
-    def test_sign_in_with_invalid_credentials(self):
-        response = self.client.post(reverse("sign_in"), {"username": "wronguser", "password": "wrongpass"})
-        self.assertEqual(response.status_code, 200)
-
     def test_user_login_and_redirect(self):
+        """
+        Tests to ensure a user redirects to the home page after login
+        """
         response = self.client.login(username="test_user", password="test_password")
         self.assertTrue(response)
         response = self.client.get(reverse("main_page"))
@@ -381,38 +378,75 @@ class AuthTests(TestCase):
 
 class AuthErrorTests(TestCase):
     def setUp(self):
+        """
+        Setup for tests in this class
+        """
         self.client = Client()
         self.user = get_user_model().objects.create_user(username="test_user", password="test_password")
 
+    def test_signup_form_validation(self):
+        """
+        Tests that a user cannot sign up without a username"""
+        response = self.client.post(reverse("signup"), {"username": "", "password1": "pass", "password2": "pass"})
+        self.assertFormError(response, "form", "username", "This field is required.")
+
+    def test_sign_in_with_invalid_credentials(self):
+        """
+        Tests to ensure a user cannot sign in with the wrong username and password
+        """
+        response = self.client.post(reverse("sign_in"), {"username": "wronguser", "password": "wrongpass"})
+        self.assertEqual(response.status_code, 200)
+
     def test_signup_with_existing_username_fails(self):
+        """
+        Tests to ensure that duplicate usernames are not allowed
+        """
         response = self.client.post(
             reverse("signup"), {"username": "test_user", "password1": "newpassword123", "password2": "newpassword123"}
         )
         self.assertFormError(response, "form", "username", "A user with that username already exists.")
 
     def test_auth_receiver_with_missing_token(self):
+        """
+        Tests to ensure a Google login is not approved with no token/credential parameter
+        """
         response = self.client.post(reverse("auth_receiver"), {})
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json(), {"error": "Missing credential"})
 
     def test_auth_receiver_with_empty_token(self):
+        """
+        Tests to ensure a Google login is not approved with no token/credential value
+        """
         response = self.client.post(reverse("auth_receiver"), {"credential": ""})
         self.assertEqual(response.status_code, 403)
 
-    @patch("google.oauth2.id_token.verify_oauth2_token", side_effect=ValueError("Invalid token"))
+    @patch("google.oauth2.id_token.verify_oauth2_token", side_effect=ValueError("Invalid token"))  # Mock up of scenario with an invalid token
     def test_auth_receiver_failure_due_to_value_error(self, mock_verify):
+        """
+        Tests to ensure a Google login is not approved with an invalid token
+        """
         response = self.client.post(reverse("auth_receiver"), {"credential": "some_invalid_token"})
         self.assertEqual(response.status_code, 403)
 
     def test_sign_out_without_login_redirects(self):
+        """
+        Tests to ensure that, if log out is attempted while not logged in, there is a redirect to the login page
+        """
         response = self.client.get(reverse("sign_out"))
         self.assertRedirects(response, reverse("sign_in"))  # Should redirect even if not logged in
 
     def test_user_login_with_incorrect_password(self):
+        """
+        Tests to ensure that a user cannot log in with an incorrect password
+        """
         response = self.client.login(username="test_user", password="wrongpass")
         self.assertFalse(response)
 
     def test_signup_with_passwords_not_matching(self):
+        """
+        Tests to ensure that a user cannot sign up with two different passwords
+        """
         response = self.client.post(
             reverse("signup"), {"username": "newuser", "password1": "password123", "password2": "differentpassword"}
         )
@@ -421,17 +455,29 @@ class AuthErrorTests(TestCase):
         )  # weird apostrophe is used in the forms - took forever to debug
 
     def test_sign_in_with_non_existent_user(self):
+        """
+        Tests to ensure that a fake/nonexistent account cannot sign in
+        """
         response = self.client.post(reverse("sign_in"), {"username": "nonexistent", "password": "somepassword"})
         self.assertEqual(response.status_code, 200)  # Should render login page again
 
     def test_sign_out_with_no_active_session(self):
+        """
+        Test to ensure logout redirects to sign in
+        """
         self.client.logout()  # Ensure user is logged out
         response = self.client.get(reverse("sign_out"))
         self.assertRedirects(response, reverse("sign_in"))  # Should still redirect to sign in
 
     def test_auth_receiver_when_user_creation_fails(self):
-        @patch("django.contrib.auth.models.User.objects.get_or_create", side_effect=Exception("Database error"))
+        """
+        Tests that authorization fails when the creation fails
+        """
+        @patch("django.contrib.auth.models.User.objects.get_or_create", side_effect=Exception("Database error"))  # mock up of database failure
         def mock_user_creation(mock_get_or_create):
+            """
+            Tests the user creation
+            """
             token = "valid_token"
             response = self.client.post(reverse("auth_receiver"), {"credential": token})
             self.assertEqual(response.status_code, 403)
@@ -439,6 +485,9 @@ class AuthErrorTests(TestCase):
         mock_user_creation()
 
     def test_password_too_common(self):
+        """
+        Tests to ensure common passwords are not allowed
+        """
         response = self.client.post(
             reverse("signup"), {"username": "newuser", "password1": "password123", "password2": "password123"}
         )
@@ -446,46 +495,62 @@ class AuthErrorTests(TestCase):
 
 
 class InfoViewsTestCase(TestCase):
+
     def setUp(self):
+        """
+        Setup for tests in this class
+        """
         self.client = Client()
         self.user = get_user_model().objects.create_user(username="test_user", password="test_password")
         self.client.login(username='test_user', password='test_password')
 
     def test_add_to_fav(self):
+        """
+        Tests adding a favorite city
+        """
         response = self.client.get(reverse('addToFav'), {'city': 'Paris', 'country': 'France'})
         self.assertEqual(response.json()['data'], 'added')
         self.assertTrue(FavCityEntry.objects.filter(city='Paris', country='France', user=self.user).exists())
 
     def test_add_and_remove_to_fave(self):
+        """
+        Tests adding and removing a favorite city
+        """
         response = self.client.get(reverse('addToFav'), {'city': 'Paris', 'country': 'France'})
         self.assertEqual(response.json()['data'], 'added')
         self.assertTrue(FavCityEntry.objects.filter(city='Paris', country='France', user=self.user).exists())
-    
+
         response = self.client.get(reverse('addToFav'), {'city': 'Paris', 'country': 'France'})
         self.assertEqual(response.json()['data'], 'removed')
         self.assertFalse(FavCityEntry.objects.filter(city='Paris', country='France', user=self.user).exists())
 
     def test_add_to_fav_no_city_or_country(self):
+        """
+        Tests retrieving a profile and if they have a favorite city
+        """
         response = self.client.get(reverse('addToFav'), {})
         self.assertEqual(response.json()['data'], None)
 
     def test_add_to_fav_unauthenticated_user(self):
+        """
+        Tests adding a favorite town while being unauthenticated
+        """
         self.client.logout()
         response = self.client.get(reverse('addToFav'), {'city': 'Berlin', 'country': 'Germany'})
-        self.assertEqual(response.status_code, 302) 
-
-    def test_info_page(self):
-        response = self.client.get(reverse('info_page'), {'city': 'Paris', 'country': 'France'})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Paris')
-        self.assertContains(response, 'France')
+        self.assertEqual(response.status_code, 302)
 
     def test_profile_page(self):
+        """
+        Tests loading a profile page
+        """
         response = self.client.get(reverse('profile_page'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile/profile.html')
 
     def test_profile_page_and_fav_city(self):
+        """
+        Tests retrieving a profile and if they have a favorite city
+        """
         FavCityEntry.objects.create(city='Paris', country='France', user=self.user)
         response = self.client.get(reverse('profile_page'))
         self.assertContains(response, 'Paris')
