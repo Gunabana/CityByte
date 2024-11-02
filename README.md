@@ -187,7 +187,7 @@ This project is deployed on AWS and is live at http://3.88.233.194:8000/
 * To run multiple API requests simultaneously, multithreading will be used.
 
 ## Need Assistance?
-If you're interested in using CityByte and need help, please send an email to bbond@ncsu.edu or via the contact info on Brody's GutHub.
+If you're interested in using CityByte and need help, please send an email to gunabanagroup@gmail.com or via the contact info on the Gunabana GutHub.
 
 ## Current Team Members
 * Brody Bond - bbond
