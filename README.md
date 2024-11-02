@@ -24,6 +24,8 @@ The start guide can be found in the <a href = https://github.com/Gunabana/CityBy
 * UI Improvements - your eyes will no longer hurt while looking at the site (the bar was low)
 * Trip Itinerary - Save the locations you want to go in each city so you don't forget!
 
+#### About CityByte!
+
 #### Tech Update
 https://github.com/user-attachments/assets/b7a2ba46-f55b-457f-b9fd-04b0591ae558
 
