@@ -28,6 +28,8 @@ The start guide can be found in the <a href = https://github.com/Gunabana/CityBy
 
 #### Tech Update
 https://github.com/user-attachments/assets/b7a2ba46-f55b-457f-b9fd-04b0591ae558
+#### Animated pitch
+https://github.com/user-attachments/assets/5005718f-2813-4870-ae0d-4223904f414c
 
 ### Old Project - Phase 1 & 2
 The old project's updates can be seen by going to the `old` branch and navigating to that README. In short, Phase 1 was the project's initial creation via command line and Phase 2 was transitioning to a webapp, creating user accounts, and using caching to reduce system crashes and increase overall speed. 
