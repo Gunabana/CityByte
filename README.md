@@ -14,7 +14,7 @@
 
 
 ## Introduction
-New and improved! Several new features and bug fixes were implemented to show significant improvement from prior work.
+Ready to explore? CityByte is the perfect tool to prepare for a trip or just virtually wander the globe. We've been hard at work to deliver new features, and we hope you enjoy. Below you can find an explination of recent updates, information about this codebase, and even how to host it yourself!
 
 ### Start Guide
 The start guide can be found in the <a href = https://github.com/Gunabana/CityByte/blob/main/INSTALL.md> INSTALL.md </a> file.
