@@ -5,12 +5,13 @@
  
  
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
     <style>
         body {
             padding: 0;
             margin: 0;
             border: none;
-            background-color: #36453b;
+            background-color: #3F3F3F;
             color: #f5f9e9;
         }
  
@@ -34,7 +35,6 @@
         #weather > .card-subtitle {
             font-size: x-small;
         }
- 
         .card-text {
             font-size: 1rem;
             font-weight: bolder;
@@ -107,14 +107,29 @@
         a:hover { text-decoration: none; }
 
         #map {
-            height: 400px; /* Set the height of the map */
-            width: 80%;   /* Full width */
+            height: 600px; /* Set the height of the map */
+            width: 90%;   /* Full width */
             padding: 1rem; /* Add padding */
             margin: 1rem auto; /* Center horizontally and add vertical margin */
             border: 2px solid #596869; /* Border color to match the card style */
             border-radius: 8px; /* Rounded corners */
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
             display: block; /* Ensure the element behaves as a block element */
+        }
+        .d-flex.flex-wrap {
+            justify-content: center;
+            gap: 1rem; /* Adds space between cards */
+        }
+        h2{
+            text-align: center;
+            justify-content: center;
+            text-decoration: underline;
+            font-family: 'Urbanist';
+        }
+        #comment{
+            
+            justify-content: center;
+            
         }
     </style>
 
@@ -127,7 +142,7 @@
                         <h1 style="font-size: 7rem; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 0.5rem 1rem; border-radius: 10px;">{{ weather_info.city_name }}</h1>
                         <h4 class="mb-3" style="background-color: rgba(0, 0, 0, 0.5); padding: 0.5rem 1rem; border-radius: 10px;">{{ weather_info.state_code }}, {{ weather_info.country_code }}</h4>
                     {% else %}
-                        <h1 style="font-size: 7rem; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 0.5rem 1rem; border-radius: 10px;">{{ city | title }}</h1>
+                        <h1 style="font-size: 7rem; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 0.5rem 1rem; border-radius: 10px; font-family: 'Urbanist';">{{ city | title }}</h1>
                     {% endif %}
                 </div>
             </div>
@@ -245,7 +260,7 @@
     </div>
  
     {% endif %}
-
+<div class="container" id="content"></div>
     <div>
         <div type="text" id="location" placeholder="Enter a location"></div>
         <div id="result"></div>
@@ -275,7 +290,7 @@
             </button>
             <button class="btn btn-secondary drop-pin-button" 
                 onClick="dropPinFromCard('{{ place.location.formatted_address }}')">
-                Drop Pin
+                Show on Map
             </button>
             <div class="card-body">
                 <h5 class="card-title">{{ place.name }}</h5>
@@ -300,7 +315,7 @@
             </button>
             <button class="btn btn-secondary drop-pin-button" 
                 onClick="dropPinFromCard('{{ place.location.formatted_address }}')">
-                Drop Pin
+                Show on Map
             </button>
             <div class="card-body">
                 <h5 class="card-title">{{ place.name }}</h5>
@@ -325,7 +340,7 @@
             </button>
             <button class="btn btn-secondary drop-pin-button" 
                 onClick="dropPinFromCard('{{ place.location.formatted_address }}')">
-                Drop Pin
+                Show on Map
             </button>
             <div class="card-body">
                 <h5 class="card-title">{{ place.name }}</h5>
@@ -339,7 +354,7 @@
     </div>
     {% if airport_info.results %}
  
-    <h2 style="margin: 4rem 0 1rem 1rem;">Airpo</h2>
+    <h2 style="margin: 4rem 0 1rem 1rem;">airport</h2>
     <div class="d-flex flex-wrap" style="margin: 1rem;">
         {% for place in airport_info.results %}
         <div class="card" style="width: 18rem; position: relative;">
@@ -352,7 +367,7 @@
             </button>
             <button class="btn btn-secondary drop-pin-button" 
                 onClick="dropPinFromCard('{{ place.location.formatted_address }}')">
-                Drop Pin
+                Show on Map
             </button>
             <div class="card-body">
                 <h5 class="card-title">{{ place.name }}</h5>
@@ -369,7 +384,7 @@
     {% endif %}
  
     <div class="container" id="comments" style="padding: 4px;">
-        <h1>Comments</h1>
+        <h2>Comments</h2>
         <hr>
  
         <!-- add comment box -->
@@ -477,9 +492,12 @@
     }
 
     function dropPinFromCard(location) {
-        // Set the input value to the location and call dropPin
+        // Set the input value to the location, call dropPin, and scroll to the top of the map
+        
         document.getElementById("location").value = location;
         dropPin();
+        var target = document.getElementById("map");
+        window.scrollTo({ top: target.offsetTop, behavior: 'smooth'})
     }
 
     async function dropPin() {
