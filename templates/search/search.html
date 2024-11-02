@@ -4,16 +4,18 @@
  
  
 {% block content %}
- 
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
 <style>
     .container {
         margin: auto;
+        font-family: 'Urbanist';
     }
  
     .search-box-container{
         display: flex;
         flex-direction: column;
         position: relative;
+        font-family: 'Urbanist';
     }
  
     /* .search-box, .search-box-suggestion {
@@ -24,10 +26,12 @@
     .auto-complete-container{
         position: absolute;
         top: 15;
+        font-family: 'Urbanist';
     }
  
     .search-box-suggestion {
         overflow: hidden;
+        font-family: 'Urbanist';
     }
  
     #query, #suggestion, #suggestion-before, #suggestion-after {
@@ -35,6 +39,7 @@
         font-size: 10rem;
         color: #f5f9e9;
         border: none;
+        font-family: 'Urbanist';
     }
  
     #suggestion, #suggestion-before, #suggestion-after {
@@ -53,6 +58,7 @@
         caret-color: transparent;
         z-index: 2;
         text-align: center;
+        font-family: 'Urbanist';
     }
     .d-block{
         display: block;
@@ -62,22 +68,18 @@
     .d-none{
         display: none;
     }
- 
-    #loading{
-        background: rgba(0,0,0,0.2);
-        color: white; margin: 8px 0; padding: 2px 8px; cursor: pointer;
- 
-    }
- 
+  
     .auto-complete-li{
         background: rgba(0,0,0,0.2);
         color: white; margin: 8px 0; padding: 2px 8px; cursor: pointer;
+        font-family: 'Urbanist';
     }
  
     .auto-complete-li:hover{
         background: rgba(0,0,0,0.5);
- 
+        font-family: 'Urbanist'; 
     }
+
 </style>
  
  
@@ -85,8 +87,7 @@
     <h1 style="font-size: 1rem; color: white; text-align: center; position:absolute; bottom:0; left:0; right:0;">{{userCount}} <span class="fa fa-regular fa-user fav"></span> signed up till now!</h1>
     <div class="search-box-container">
         <div class="search-box"><input type="text" class="form-control" id="query" spellcheck="false" autocomplete="off" onkeyup="getSuggestions(event)" placeholder="Type a city"></div>
-        <div class="d-none" id="loading">
-            Loading...
+        <div class="spinner-border text-info" id="loading">
         </div>
         <div id="auto-complete-container" style="font-size:24px; height: 150px; overflow-y: hidden;">
             <ul id="auto-complete-ul" style="list-style-type: none;">
