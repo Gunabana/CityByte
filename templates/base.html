@@ -71,6 +71,10 @@
         footer{
             background-color: #1a1a1a;
             padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            color: white;
         }
     </style>
 
@@ -114,11 +118,11 @@
 
     {% block content %}
     {% endblock %}
+    <footer>
+        <p>CityByte 2024</p>
+      </footer>
+          
 </body>
-<footer>
-    <p>CityByte 2024</p>
-  </footer>
-  
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
