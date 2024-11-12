@@ -3,7 +3,7 @@
 #### 1. Clone the repository:  
 
 ```
-git clone https://github.com/rohitgeddam/CityByte.git
+git clone https://github.com/Gunabana/CityByte
 ```
 
 
